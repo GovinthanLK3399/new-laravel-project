@@ -13,4 +13,19 @@
   }
 
 
+  .updown-icon {
+    min-width: 20px; /* Set the minimum width of the icon */
+    max-width: 30px; /* Set the maximum width of the icon */
+    height: auto; /* Maintain the aspect ratio */
+    cursor: pointer;
+  }
+
+  @media (max-width: 576px) {
+    .updown-icon {
+      min-width: 15px; /* Adjust the minimum width for smaller screens */
+      max-width: 30px; /* Adjust the maximum width for smaller screens */
+    }
+  }
+
+
   

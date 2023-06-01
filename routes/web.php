@@ -38,6 +38,16 @@ Route::delete('/roles/{deleteId}', 'RolesController@destroy')->name('roles.delet
 Route::resource('roles', RolesController::class);
 
 
+
+Route::get('/modules','moduleController@index')->name('module.index');
+Route::get('/modules/{moduleId}','moduleController@edit')->name('module.edit');
+Route::post('/moduleupdate','moduleController@update')->name('module.update');
+Route::delete('/modules/{moduleId}','moduleController@destroy')->name('module.delete');
+Route::post('/storemodule','moduleController@store')->name('module.store');
+Route::put('/moduleorder','moduleController@updateorder')->name('module.update-order');
+Route::post('/update-dashboard-status','moduleController@updateIsDashboard')->name('module.update-dashboard');
+
+
 });
 
 

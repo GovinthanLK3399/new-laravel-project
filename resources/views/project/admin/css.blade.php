@@ -47,7 +47,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-
+<!-- sweet alert  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- my script and css -->
+    <script src="roles_file/script.js" type="text/javascript"></script>
   
     <link rel="stylesheet" type="text/css" href="/roles_file/style.css">

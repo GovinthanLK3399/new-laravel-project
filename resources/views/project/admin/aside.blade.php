@@ -1,7 +1,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="/sneat/html/index.html" class="app-brand-link">
-              <!-- <span class="app-brand-logo demo">
+              <span class="app-brand-logo demo">
                  <svg
                   width="25"
                   viewBox="0 0 25 42"
@@ -55,9 +55,11 @@
                     </g>
                   </g>
                 </svg>
-              </span>-->
+              </span>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+
               <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2"><img src="/icons/logo.png" alt="" width="70%"></span> -->
-              <span><img src="/icons/logo.png" alt="" width="100%"></span>
+              <!-- <span><img src="/icons/logo.png" alt="" width="100%"></span> -->
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -69,20 +71,30 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item active">
+            <!-- <li class="menu-item active">
               <a href="/sneat/html/index.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
-            </li>
+            </li> -->
             
             
             <!-- roles -->
            
-            <li class="menu-item ">
-              <a href="{{ route('roles.index') }}" class="menu-link">
-                <!-- <i class="menu-icon tf-icons bx bx-home-circle"></i> -->
-                <div data-i18n="Analytics">Roles</div>
+            <li class="text-center menu-item ">
+              
+              <a href="{{ route('roles.index') }}" class=" text-center menu-link">
+                <i class="menu-icon   "><img src="icons/role.png" alt="" width="100%"></i>
+                <div data-i18n="Analytics" class="text-center">Roles</div>
+              </a>
+            </li>
+
+
+            <li class="text-center menu-item ">
+              
+              <a href="{{ route('module.index') }}" class=" text-center menu-link">
+                <i class="menu-icon   "><img src="icons/module.png" alt="" width="100%"></i>
+                <div data-i18n="Analytics" class="text-center">Modules</div>
               </a>
             </li>
             

@@ -35,5 +35,3 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
         <!-- ajax  -->
-
-        <script src="roles_file/script.js" type="text/javascript"></script>

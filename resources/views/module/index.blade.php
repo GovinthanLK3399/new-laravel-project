@@ -14,6 +14,7 @@
 
    
 
+
   </head>
  
   <body>
@@ -46,7 +47,7 @@
             <div class="container-xxl flex-grow-1 container-p-y">
   <div class="row align-items-center justify-content-between mb-4">
     <div class="col">
-      <h4 class="fw-bold py-3"><span class="text-muted fw-light">Roles</span></h4>
+      <h4 class="fw-bold py-3"><span class="text-muted fw-light">Modules</span></h4>
     </div>
     <div class="col-auto">
       <div class="demo-inline-spacing">
@@ -54,9 +55,9 @@
           type="button"
           class="btn btn-primary"
           data-bs-toggle="modal"
-          data-bs-target="#createModal"
+          data-bs-target="#moduleCreateModal"
         >
-          Create Role
+          Create Module
         </button>
       </div>
     </div>
@@ -70,7 +71,7 @@
 <!--Create Modal -->
 
 
-<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="moduleCreateModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-sm" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -83,14 +84,14 @@
                               ></button>
                             </div>
                            
-                            <form id="roleCreateForm">
+                            <form id="moduleCreateForm">
                                 @csrf
                             <div class="modal-body">
                               <input type="hidden" name="id" id="id">
                               <div class="row">
                                 <div class="col mb-3">
-                                  <label for="nameSmall" class="form-label">Role Name</label>
-                                  <input type="text" id="name-create"  class="form-control" placeholder="Enter role Name" />
+                                  <label for="nameSmall" class="form-label">module Name</label>
+                                  <input type="text" id="modulename-create"  class="form-control" placeholder="Enter module Name" />
                                 </div>
 
                                 
@@ -103,7 +104,7 @@
                               <!-- <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                 Close
                               </button> -->
-                              <button type="submit" class="btn btn-primary">Create role</button>
+                              <button type="submit" class="btn btn-primary">Create module</button>
                             </div>
                           </div>
 
@@ -170,34 +171,51 @@
               <div class="card">
                 <!-- <h5 class="card-header">Table Basic</h5> -->
                 <div class="table-responsive text-nowrap text-center">
-                  <table class="table serial-number" id="roleTable">
+                  <table class="table serial-number" id="moduleTable">
                     <thead>
                       <tr>
-                        <th>Role</th>
-                        <!-- <th>Gaurd</th> -->
+                        <th>Module</th>
+                        <th>slug</th>
+                        <th>Order</th>
+                        <th>Dashboard View</th>
                         <th>Edit</th>
                         <th>Delete</th>
                         <!-- <th>Actions</th> -->
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        @foreach($role as $view_role)
-                      <tr id="rid{{$view_role->id}}">
+                        @foreach($module as $view_module)
+                      <tr id="mid{{$view_module->id}}">
                         <td>
                           <!-- <i class="fab fa-angular fa-lg text-danger me-3"></i> -->
-                           <strong>{{$view_role->name}}</strong></td>
-                        <!-- <td>{{$view_role->guard_name}}</td> -->
-                        <td>
-                             <!-- <button class="btn btn-primary btn-edit" data-id="{{ $view_role->id }}">edit</button> -->
+                           <strong>{{$view_module->name}}</strong></td>
+                        <!-- <td>{{$view_module->guard_name}}</td> -->
 
-                              <a  data-id="{{ $view_role->id }}" onclick="editRole ({{ $view_role->id}})"><img src="/icons/edit.png" alt="" class="edit-icon"></a>
+                        <td>{{$view_module->slug}}</td>
+                        <td>
+                           <img src="icons/up.png" alt="" class="updown-icon move-up" data-module-id="{{ $view_module->id }}" >
+                           <img src="icons/down.png" alt="" class="updown-icon move-down" data-module-id="{{ $view_module->id }}">
+                        </td>
+
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center align-items-center">
+                                <div class="form-check form-switch mb-2">
+                                  <input class="form-check-input" type="checkbox" id="dashboard-module-edit" {{ $view_module->is_dashboard == 0 ? 'checked' : '' }} onchange="updateDashboardStatus({{ $view_module->id }}, this.checked)" />
+                                </div>
+                              </div>
+                            </td>
+
+                        <td>
+                             <!-- <button class="btn btn-primary btn-edit" data-id="{{ $view_module->id }}">edit</button> -->
+
+                              <a  data-id="{{ $view_module->id }}" onclick="editModule({{ $view_module->id}})"><img src="/icons/edit.png" alt="" class="edit-icon"></a>
 
 
                         </td>
                         <td>
                           
                             <!-- <span class="badge bg-label-primary me-1">Active</span> -->
-                            <a class="btn-delete" onclick="deleterole({{ $view_role->id }})" data-id="{{ $view_role->id }}"><img src="/icons/delete.png" alt=""class="edit-icon"></a>
+                            <a class="btn-delete" onclick="deleteModule({{ $view_module->id }})" data-id="{{ $view_module->id }}"><img src="/icons/delete.png" alt=""class="edit-icon"></a>
 
 
                         </td>
@@ -229,9 +247,7 @@
 
               <!--/ Basic Bootstrap Table -->
 
-            
-              
-
+          
 
 
 
@@ -239,7 +255,7 @@
 <!-- edit Modal -->
 
 
-                      <div class="modal fade" id="roleEditModal" tabindex="-1" aria-hidden="true">
+                      <div class="modal fade" id="moduleEditModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-sm" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -248,18 +264,18 @@
                                 type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
-                                aria-label="Close"
-                              ></button>
+                                aria-label="Close">
+                              </button>
                             </div>
                            
-                            <form id="roleUpdateForm">
+                            <form id="moduleUpdateForm">
                                 @csrf
                             <div class="modal-body">
                               <input type="hidden" name="id" id="id">
                               <div class="row">
                                 <div class="col mb-3">
-                                  <label for="nameSmall" class="form-label">Role Name</label>
-                                  <input type="text" id="name-edit"  class="form-control" placeholder="Enter Role Name" />
+                                  <label for="nameSmall" class="form-label">Module Name</label>
+                                  <input type="text" id="moduleName-edit"  class="form-control" placeholder="Enter Module Name" />
                                 </div>
 
                                 
@@ -267,7 +283,7 @@
                       
                               </div>
                                         <div class="form-check form-switch mb-2">
-                                  <input class="form-check-input" type="checkbox"  id="status-edit" checked />
+                                  <input class="form-check-input" type="checkbox"  id="status-module-edit" checked />
                                   <label class="form-check-label" for="flexSwitchCheckChecked"
                                     >Status</label
                                   >
@@ -293,24 +309,19 @@
 
 <script>
 
+// create module function 
 
 
-
-
-
-// create role function 
-
-
-$("#roleCreateForm").submit(function(e){
+$("#moduleCreateForm").submit(function(e){
   e.preventDefault();
 
    
-    let name =$("#name-create").val();
+    let name =$("#modulename-create").val();
     let _token =$("input[name=_token]").val();
 
 
     $.ajax({
-      url: "{{route('role.store')}}",
+      url: "{{route('module.store')}}",
       type: "POST",
       data: {
         name: name,
@@ -319,16 +330,28 @@ $("#roleCreateForm").submit(function(e){
       success: function(response){
           if(response)
           {
-            var newRow = '<tr id="rid' + response.id + '">' +
+            console.log(response);
+            var newRow = '<tr id="mid' + response.id + '">' +
                 '<td><strong>' + response.name + '</strong></td>' +
+                '<td>' + response.slug + '</td>' +
+                '<td>' + '<img src="icons/up.png" alt="" class="updown-icon" onclick="uporderModule('+ response.order +')" > <img src="icons/down.png" alt="" class="updown-icon" onclick="downorderModule('+ response.order +')">' + '</td>' +
+                '<td class="text-center">' +
+  '<div class="d-flex justify-content-center align-items-center">' +
+    '<div class="form-check form-switch mb-2">' +
+      '<input class="form-check-input" type="checkbox" id="dashboard-module-edit-' + response.id + '" ' + (response.is_dashboard == 0 ? 'checked' : '') + ' onchange="updateDashboardStatus(' + response.id + ', this.checked)" />' +
+    '</div>' +
+  '</div>' +
+'</td>'+
+
                 '<td>' +
-                  '<a data-id="' + response.id + '" onclick="editRole(' + response.id + ')"><img src="/icons/edit.png" alt="" class="edit-icon"></a>' +
+                  '<a data-id="' + response.id + '" onclick="editModule(' + response.id + ')"><img src="/icons/edit.png" alt="" class="edit-icon"></a>' +
                 '</td>' +
                 '<td>' +
-                  '<a class="btn-delete" onclick="deleterole('+ response.id +')" data-id="' + response.id + '"><img src="/icons/delete.png" alt="" class="edit-icon"></a>' +
+                  '<a class="btn-delete" onclick="deleteModule(' + response.id + ')" data-id="' + response.id + '"><img src="/icons/delete.png" alt="" class="edit-icon"></a>' +
                 '</td>' +
               '</tr>';
-  $("#roleTable tbody").prepend(newRow);
+
+  $("#moduleTable tbody").append(newRow);
 
    //success message 
    toastr.options = {
@@ -337,17 +360,21 @@ $("#roleCreateForm").submit(function(e){
       positionClass: 'toast-top-right',
       timeOut: 5000
     };
-   toastr.success('Role created successful!');
+   toastr.success('Module created successful!');
 
-             $("#roleCreateForm")[0].reset();
-             $("#createModal").modal('hide');
+             $("#moduleCreateForm")[0].reset();
+             $("#moduleCreateModal").modal('hide');
           }
       },
       error: function(error) {
     if (error.responseJSON.errors && error.responseJSON.errors.name) {
       let errorMessage = error.responseJSON.errors.name[0];
-      $("#name-create").addClass('is-invalid');
-      $("#name-create").after('<div class="invalid-feedback">' + errorMessage + '</div>');
+       
+       $('#modulename-create').removeClass("is-invalid");
+       $('#modulename-create').next(".invalid-feedback").remove();
+
+      $("#modulename-create").addClass('is-invalid');
+      $("#modulename-create").after('<div class="invalid-feedback">' + errorMessage + '</div>');
     }
   },
       
@@ -357,7 +384,7 @@ $("#roleCreateForm").submit(function(e){
 
   //create for error messsage hide if edit the input value again
 
-  $("#name-create").on("input", function() {
+  $("#modulename-create").on("input", function() {
   if ($(this).hasClass("is-invalid")) {
     $(this).removeClass("is-invalid");
     $(this).next(".invalid-feedback").remove();
@@ -366,28 +393,34 @@ $("#roleCreateForm").submit(function(e){
 
 
 
-  // Edit role function.....................................................................................
-  function editRole(roleId) {
+
+
+
+
+
+// Edit module function.....................................................................................
+  function editModule(moduleId) {
   // Make an AJAX GET request to retrieve the role data
   $('.form-control.is-invalid').removeClass('is-invalid');
 $('.invalid-feedback').remove();
-  $.get('role/' + roleId, function(role){
-    $("#id").val(role.id);
-    $("#name-edit").val(role.name);
-    $("#status-edit").prop('checked', role.status == 0);
-    $("#roleEditModal").modal('toggle');
+  $.get('modules/' + moduleId, function(moduleEdit){
+    $("#id").val(moduleEdit.id);
+    $("#moduleName-edit").val(moduleEdit.name);
+    $("#status-module-edit").prop('checked', moduleEdit.status == 0);
+    $("#moduleEditModal").modal('toggle');
+    // console.log(moduleId)
   });
 }
 
-$("#roleUpdateForm").submit(function(e){
+$("#moduleUpdateForm").submit(function(e){
   e.preventDefault();
   let id = $("#id").val();
-  let name = $("#name-edit").val();
-  let status = $("#status-edit").prop('checked') ? 0 : 1;
+  let name = $("#moduleName-edit").val();
+  let status = $("#status-module-edit").prop('checked') ? 0 : 1;
   let _token = $("input[name=_token]").val();
 
   $.ajax({
-    url: "roleupdate",
+    url: "moduleupdate",
     type: "POST",
     data: {
       id:id,
@@ -396,11 +429,11 @@ $("#roleUpdateForm").submit(function(e){
       _token: _token,
     },
     success: function(response){
-      console.log(response); // Handle the response here
+    //   console.log(response); // Handle the response here
 
-      $('#rid' + response.id + ' td:nth-child(1)').html('<strong>' + response.name + '</strong>');
-      // $('#rid' + response.id + ' td:nth-child(2)').text(response.guard_name);
-      
+      $('#mid' + response.id + ' td:nth-child(1)').html('<strong>' + response.name + '</strong>');
+      $('#mid' + response.id + ' td:nth-child(2)').text(response.slug); // Update the slug in the table
+
       //success message 
       toastr.options = {
           closeButton: true,
@@ -408,16 +441,21 @@ $("#roleUpdateForm").submit(function(e){
           positionClass: 'toast-top-right',
           timeOut: 5000
         };
-      toastr.success('Role update successful!');
+      toastr.success('Module update successful!');
 
-      $("#roleEditModal").modal('toggle');
-      $("#roleUpdateForm")[0].reset();
+      $("#moduleEditModal").modal('toggle');
+      $("#moduleUpdateForm")[0].reset();
     },
     error: function(error) {
     if (error.responseJSON.errors && error.responseJSON.errors.name) {
       let errorMessage = error.responseJSON.errors.name[0];
-      $("#name-edit").addClass('is-invalid');
-      $("#name-edit").after('<div class="invalid-feedback">' + errorMessage + '</div>');
+
+      $("#moduleName-edit").removeClass("is-invalid");
+      $("#moduleName-edit").next(".invalid-feedback").remove();
+
+
+      $("#moduleName-edit").addClass('is-invalid');
+      $("#moduleName-edit").after('<div class="invalid-feedback">' + errorMessage + '</div>');
     }
   }
   });
@@ -426,7 +464,7 @@ $("#roleUpdateForm").submit(function(e){
 
 
 //error message hide from input box while edit some text.....
-$("#name-edit").on("input", function() {
+$("#moduleName-edit").on("input", function() {
   if ($(this).hasClass("is-invalid")) {
     $(this).removeClass("is-invalid");
     $(this).next(".invalid-feedback").remove();
@@ -440,11 +478,11 @@ $("#name-edit").on("input", function() {
 //delete function .........................................................................
 
 // Delete button click event handler
-function deleterole(roleId) {
+function deleteModule(moduleId) {
   // Prompt the user for confirmation using SweetAlert
   Swal.fire({
     title: 'Are you sure?',
-    text: 'You will not be able to recover this role!',
+    text: 'You will not be able to recover this module!',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Yes, delete it!',
@@ -454,26 +492,26 @@ function deleterole(roleId) {
     if (result.isConfirmed) {
       // Send the delete request via Ajax
       $.ajax({
-        url: '/roles/' + roleId,
+        url: '/modules/' + moduleId,
         type: 'DELETE',
         data: {
           "_token": "{{ csrf_token() }}"
         },
         success: function(response) {
           // Handle the successful delete response
-          console.log(response.message);
+        //   console.log(response.message);
           
           // Display a success message using SweetAlert
           Swal.fire({
             title: 'Deleted!',
-            text: 'The role has been deleted.',
+            text: 'The module has been deleted.',
             icon: 'success',
             timer: 3000,
             showConfirmButton: false
           });
 
           // Remove the deleted role from the UI
-          $('#rid' + roleId).remove();
+          $('#mid' + moduleId).remove();
         },
         error: function(error) {
           if (error.status === 422) {
@@ -503,6 +541,95 @@ function deleterole(roleId) {
 
 
 
+//swap table Handle move-up button click event.................................................................
+$('.move-up').on('click', function() {
+        var moduleId = $(this).data('module-id');
+        var direction = 'up';
+
+        updateModuleOrder(moduleId, direction);
+    });
+
+    // Handle move-down button click event
+    $('.move-down').on('click', function() {
+        var moduleId = $(this).data('module-id');
+        var direction = 'down';
+
+        updateModuleOrder(moduleId, direction);
+    });
+    // Update module order using Ajax
+    function updateModuleOrder(moduleId, direction) {
+
+        $.ajax({
+            url: "{{ route('module.update-order') }}",
+            method: "PUT",
+            data: {
+                module_id: moduleId,
+                direction: direction,
+                _token: "{{ csrf_token() }}"
+            },
+
+            success: function(response) {
+                console.log(response);
+
+                if (response.success) {
+                  // Update the table row with the new data
+                  var currentRow = $('#mid' + moduleId);
+                  var newRow = direction === 'up' ? currentRow.prev() : currentRow.next();
+
+                  if (newRow.length) {
+                    // Swap the row IDs
+                    currentRow.attr('id', 'mid' + newRow.data('module-id'));
+                    newRow.attr('id', 'mid' + moduleId);
+
+                    // Swap the module data in the table rows
+                    var currentData = currentRow.html();
+                    var newData = newRow.html();
+
+                    currentRow.html(newData);
+                    newRow.html(currentData);
+
+                     // Update the data-module-id attribute
+                    var currentModuleId = currentRow.data('module-id');
+                    var newModuleId = newRow.data('module-id');
+
+                    currentRow.data('module-id', newModuleId);
+                    newRow.data('module-id', currentModuleId);
+                  }
+                }
+            }
+        });
+    }
+
+
+
+//is dashboard status ..........................................................................................
+
+
+function updateDashboardStatus(moduleId, isChecked) {
+    // Send the AJAX request
+    console.log(moduleId, isChecked);
+    $.ajax({
+      url: "{{ route('module.update-dashboard') }}",
+      method: 'POST',
+      data: {
+        moduleId: moduleId,
+        isChecked: isChecked,
+        _token: "{{ csrf_token() }}"
+      },
+      success: function(response) {
+        console.log(response);
+        // Update the input box checkbox based on the response
+        if (response.success) {
+          var checkbox = $("#dashboard-module-edit-" + moduleId);
+          checkbox.prop("checked", response.is_dashboard);
+        }
+      },
+      error: function(xhr, status, error) {
+        // Handle the error if needed
+        console.log(error);
+      }
+    });
+  }
 
 </script>
 
@@ -520,3 +647,4 @@ function deleterole(roleId) {
      @include('project.admin.script')
   </body>
 </html>
+ 
